@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
 sqlalchemy==2.0.23
@@ -5,4 +6,13 @@ asyncpg==0.29.0
 psycopg2-binary==2.9.9
 alembic==1.12.1
 python-dotenv==1.0.0
+=======
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+sqlalchemy==2.0.23
+asyncpg==0.29.0
+psycopg2-binary==2.9.9
+alembic==1.12.1
+python-dotenv==1.0.0
+>>>>>>> 1804b3ff469a7d4cf71dfd81dcfc45fbc1644054
 pydantic[email]==2.5.0

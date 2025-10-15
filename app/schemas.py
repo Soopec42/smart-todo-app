@@ -13,7 +13,7 @@ class TaskCreate(TaskBase):
     pass
 
 # Схема для ответа API
-class TaskAPI(TaskBase):
+class Task(TaskBase):
     id: int
     created_at: datetime
 

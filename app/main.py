@@ -8,7 +8,8 @@ import crud
 from database import *
 
 async def create_tables():
-    await engine.begin().run_sync(models.Base.metadata.create_all)
+    async with engine.begin() as conn:
+        await conn.run_sync(models.Base.metadata.create_all)
 
 
 app = FastAPI(title="Smart Todo App", version='1.0.0')

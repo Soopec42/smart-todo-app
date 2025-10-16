@@ -4,12 +4,12 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-Database_URL = os.getenv("DATABASE_URL")
+Database_URL = "postgresql+asyncpg://postgres:gumanoid99@localhost:5432/smart_todo"
 
 engine = create_async_engine(Database_URL, echo = True)
 
 AsyncSessionLocal = sessionmaker(
-    bind = engine,
+    bind = engine, 
     class_ = AsyncSession,
     expire_on_commit=False
     )

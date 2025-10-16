@@ -8,11 +8,12 @@ class TaskBase(BaseModel):
     tags: Optional[List[str]] = None
     meta: Optional[dict[str, Any]] = None
 
-# Схема для создания задач
 class TaskCreate(TaskBase):
     pass
 
-# Схема для ответа API
+class TaskUpdate(TaskBase):
+    title: Optional[str] = None
+
 class Task(TaskBase):
     id: int
     created_at: datetime

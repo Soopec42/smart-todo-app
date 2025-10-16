@@ -8,7 +8,7 @@ class Task(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index = True, nullable = False)
     description = Column(String)
-    create_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
     tags = Column(JSON, nullable=True)
     meta = Column(JSON, nullable=True)
 

@@ -1,4 +1,3 @@
-from codecs import backslashreplace_errors
 from sqlalchemy import *
 from sqlalchemy.sql import *
 from database import Base
@@ -13,7 +12,7 @@ class Task(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     tags = Column(JSON, nullable=True)
     meta = Column(JSON, nullable=True)
-    user = relationship("User", back_populates="posts", uselist=False)
+    #user = relationship("User", back_populates="posts", uselist=False)
 
 
 class User(Base):
@@ -22,4 +21,4 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_name = Column(String, unique = True, nullable = False)
     meta = Column(JSON, nullable=True)
-    posts = relationship("Task", back_populates= "user", uselist=True)
+    #posts = relationship("Task", back_populates= "user", uselist=True)

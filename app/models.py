@@ -12,7 +12,8 @@ class Task(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     tags = Column(JSON, nullable=True)
     meta = Column(JSON, nullable=True)
-    #user = relationship("User", back_populates="posts", uselist=False)
+    owner_id = Column(Integer, ForeignKey("users.id"), nullable=true)  
+    owner = relationship("User",foreign_keys=[owner_id], back_populates="tasks", uselist=False)
 
 
 class User(Base):
@@ -21,4 +22,4 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_name = Column(String, unique = True, nullable = False)
     meta = Column(JSON, nullable=True)
-    #posts = relationship("Task", back_populates= "user", uselist=True)
+    tasks = relationship("Task", back_populates= "owner", uselist=True)

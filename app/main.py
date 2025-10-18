@@ -1,6 +1,9 @@
 from fastapi import *
 from .routers import tasks, users
 
+import models, schemas, crud
+from database import *
+
 async def create_tables():
     async with engine.begin() as conn:
         await conn.run_sync(models.Base.metadata.create_all)

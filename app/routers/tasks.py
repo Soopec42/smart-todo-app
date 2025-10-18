@@ -23,7 +23,7 @@ async def read_tasks(skip: int = 0, limit: int = 100, db: AsyncSession = Depends
     tasks = await crud.get_tasks(skip = skip, limit = limit, db = db)
     return tasks
 
-@router.put("/{task_id}", response_model=schemas.Task)
+@router.patch("/{task_id}", response_model=schemas.Task)
 async def update_existing_task(task_id: int, task: schemas.TaskUpdate, db: AsyncSession = Depends(get_db)):
     db_task = await crud.update_task(db = db, task_id = task_id, task_update= task)
     if db_task is None:

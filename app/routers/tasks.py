@@ -39,7 +39,20 @@ async def delete_existing_task(task_id: int, db: AsyncSession = Depends(get_db))
         raise HTTPException(status_code=404, detail="Task not found")
     return {"message": "Task deleted successfully"}
 
-
+@router.get("/search/", response_model=List[schemas.Task])
+async def search_tasks(
+    q: str,
+    search_in: List[str] =Query(["title", "description"]),
+    skip: int = 0,
+    limit: int = 100,
+    db: AsyncSession = Depends(get_db)
+):
+    search_query = schemas.SearchQuery(q=q, search_in=search_in, skip=skip, limit=limit)
+    tasks = await crud.advanced_search_tasks(
+        db=db,
+        search_query=search_query
+    )
+    return tasks
 
 
 

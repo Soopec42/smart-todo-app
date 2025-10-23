@@ -139,20 +139,13 @@ async def create_task_and_assign(db: AsyncSession, task: schemas.TaskCreate, use
 async def advanced_search_tasks(
     db: AsyncSession,
     search_query: schemas.SearchQuery,
-    skip: int = 0,
-    limit: int = 100
 ):
     if not search_query.q:
-        return await get_tasks(db=db, skip=skip, limit=limit)
+        return await get_tasks(db=db, skip=search_query.skip, limit=search_query.limit)
     
     search_terms = search_query.q.split()
     search_conditions = []
    
-    field_weights = {
-        'title': 2.0,
-        'description': 1.0,
-        'tags': 1.5
-    }
     
     for term in search_terms:
         term_pattern = f"%{term}%"
@@ -176,7 +169,7 @@ async def advanced_search_tasks(
         models.Task.created_at.desc() 
     )
     
-    query = query.offset(skip).limit(limit)
+    query = query.offset(search_query.skip).limit(search_query.limit)
     result = await db.execute(query)
     return result.scalars().all()
 

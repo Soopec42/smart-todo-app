@@ -1,8 +1,9 @@
 from ast import List
-from sqlalchemy import AsyncAdaptedQueuePool
+from sqlalchemy import AsyncAdaptedQueuePool, or_, and_, select, case
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from types import *
+from typing import *
+from sqlalchemy.sql.expression import false, true
 import models
 import schemas
 
@@ -75,7 +76,7 @@ async def update_user(db: AsyncSession, user_id: int, user_update: schemas.UserU
 async def delete_user(db: AsyncSession, user_id: int):
     result = await db.execute(select(models.User).where(user_id == models.User.id))
     db_user = result.scalar_one_or_none()
-
+    
     if db_user:
         db.delete(db_user)
         db.commit()
@@ -135,7 +136,49 @@ async def create_task_and_assign(db: AsyncSession, task: schemas.TaskCreate, use
     return db_task
 
 
-
+async def advanced_search_tasks(
+    db: AsyncSession,
+    search_query: schemas.SearchQuery,
+    skip: int = 0,
+    limit: int = 100
+):
+    if not search_query.q:
+        return await get_tasks(db=db, skip=skip, limit=limit)
+    
+    search_terms = search_query.q.split()
+    search_conditions = []
+   
+    field_weights = {
+        'title': 2.0,
+        'description': 1.0,
+        'tags': 1.5
+    }
+    
+    for term in search_terms:
+        term_pattern = f"%{term}%"
+        term_conditions = []
+        
+        if "title" in search_query.search_in:
+            term_conditions.append(models.Task.title.ilike(term_pattern))
+        
+        if "description" in search_query.search_in:
+            term_conditions.append(models.Task.description.ilike(term_pattern))
+        
+        if term_conditions:
+            search_conditions.append(or_(*term_conditions))
+    
+    query = select(models.Task)
+    
+    if search_conditions:
+        query = query.where(and_(*search_conditions))
+    
+    query = query.order_by(
+        models.Task.created_at.desc() 
+    )
+    
+    query = query.offset(skip).limit(limit)
+    result = await db.execute(query)
+    return result.scalars().all()
 
 
 

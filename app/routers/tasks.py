@@ -2,8 +2,10 @@ from fastapi import *
 from typing import *
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .. import models, schemas, crud
-from ..database import *
+import schemas
+import models
+import crud
+from database import get_db
 
 router = APIRouter()
 

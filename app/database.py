@@ -1,9 +1,7 @@
 from sqlalchemy.ext.asyncio import *
 from sqlalchemy.orm import *
 import os
-from dotenv import load_dotenv
 
-load_dotenv()
 Database_URL = "postgresql+asyncpg://postgres:gumanoid99@localhost:5432/smart_todo"
 
 engine = create_async_engine(Database_URL, echo = True)
